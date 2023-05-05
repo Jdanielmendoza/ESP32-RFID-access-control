@@ -16,6 +16,9 @@
 
 WiFiMulti wifiMulti;
 
+#define ROJO 14
+#define VERDE 12
+
 /*
   const char* ca = \
   "-----BEGIN CERTIFICATE-----\n" \
@@ -48,6 +51,8 @@ WiFiMulti wifiMulti;
 */
 
 void setup() {
+  pinMode(ROJO, OUTPUT);
+  pinMode(VERDE, OUTPUT);
 
   USE_SERIAL.begin(115200);
 
@@ -93,9 +98,17 @@ void loop() {
           if (httpCode == HTTP_CODE_OK) {
             String payload = http.getString();
             if (payload == "activo") {
-              USE_SERIAL.println("abrir puerta");
+              USE_SERIAL.println("acceso permitido");
+              digitalWrite(VERDE, HIGH);
+              delay(2000); 
+              digitalWrite(VERDE, LOW);
+              
             } else if (payload == "inactivo") {
-              USE_SERIAL.println("no abrir puerta");
+              USE_SERIAL.println("acceso denegado!");
+              digitalWrite(ROJO, HIGH);
+              delay(2000); 
+              digitalWrite(ROJO, LOW);
+
             }
             USE_SERIAL.println(payload);
           }
